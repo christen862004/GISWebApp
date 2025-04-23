@@ -1,3 +1,4 @@
+
 using GISWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ namespace GISWebApp.Controllers
         //Home/ShowText
         public ContentResult ShowText()
         {
+          
             //logic ....
 
             //Declare
@@ -26,43 +28,56 @@ namespace GISWebApp.Controllers
             return result;//response string html
         }
         //Home/ShowView
+        
         public ViewResult ShowView()
         {
+            
             //logic calling model method
-            //response
-            ViewResult result = new ViewResult();//declaration define object
-            result.ViewName = "View1"; ; //set info
-            return result;
+            return View("View1");
         }
-      //Home/showMix ? no =sadjhasj & name=ahmed & id=1  ==>string
-      //Home/showMix/1 ? no =2 & name=Mohamed ==>view
-
+        //Home/showMix ? no =sadjhasj & name=ahmed & id=1  ==>string
+        //Home/showMix/1 ? no =2 & name=Mohamed ==>view
+        //DIP
         public IActionResult ShowMix(int no,string name,int id)//endpoint view or content
         {
             if (no % 2 == 0)
             {
-                ViewResult result = new ViewResult();//declaration define object
-                result.ViewName = "View1"; ; //set info
-                return result;
+                //logic model
+                return View("View1");//calling
             }
             else
             {
-                ContentResult result = new ContentResult();
-                result.Content = "' Hi From My First Mvc MEthod";
-                return result;//r
+                return Content("Hi from Action");
             }
             
         }
+        //Dry
+        //public ViewResult View(string name)
+        //{
+        //    ViewResult result = new ViewResult();//declaration define object
+        //    result.ViewName = name; ; //set info
+        //    return result;
+        //}
+
+
+
+
+
+
+
+
+
+
 
         /// Action can return [response type]  :ActionREsult
-        /// 1) content   ==> ContentResult
-        /// 2) View      ==> ViewResult
-        /// 3) json      ==> JsonResult
-        /// 4) notfound  ==> NotFoundREsult
+        /// 1) content   ==> ContentResult   ==> Content("Mesg")
+        /// 2) View      ==> ViewResult      ==> View(ViewNAme)
+        /// 3) json      ==> JsonResult      ==> Json(obj)
+        /// 4) notfound  ==> NotFoundREsult  ==> NotFount()
         /// 5) file      
         /// 6) void      ==> EmptyResult
         /// .....
-        
+
 
 
 

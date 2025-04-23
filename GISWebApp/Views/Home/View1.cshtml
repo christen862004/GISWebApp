@@ -1,3 +1,46 @@
 ﻿
 
 <h1>My First View</h1>
+
+<style>
+    h1{
+        color:blue;
+        background-color:yellow;
+    }
+</style>
+
+<script>
+console.log("Hi FRom JS");
+</script>
+<!--C#-->
+<!--Razor Sytax statent C# Need to render "Server"-->
+<!--Block of Code-->
+@{
+    //C# comment valid C# Statamnet declare "View Light"
+    int x = 10;
+    int y = x + 10;
+    //avaliable html code
+}
+<!--inline Statment "one line C# render value-->
+<h1>@y</h1>
+<h3>@y</h3>
+<h4>@(x + y)</h4>
+<hr/>
+
+<!--Condition (if ,if else ,switch)-->
+@if (x > y){
+    <h2>X greater than y</h2>
+}//scop if body & C# Code
+else
+{
+    <h2>X =@x Less than Y = @y</h2>
+}
+
+
+<!-- loop for | while | do while | foreach -->
+<ul>
+@for(int i = 1; i < 10; i++)
+{
+    <li>@i</li>
+}
+</ul>
