@@ -10,8 +10,9 @@ namespace GISWebApp.Controllers
         //Trainee/All
         public IActionResult All()
         {
+
             //ask model get trainee data
-            List<Trainee> tList= traineeBL.GetAll();
+            List<Trainee> tList=traineeBL.GetAll();
             //send view
             return View("ShowAll",tList);
             //go to view with name  "ShowAll"
@@ -22,6 +23,7 @@ namespace GISWebApp.Controllers
         //Trainee/Details?id=100
         public IActionResult Details(int id)
         {
+           // traineeBL.GetAll()
             Trainee TraineeModel= traineeBL.GetByID(id);
             if (TraineeModel == null)
             {
