@@ -1,10 +1,11 @@
-﻿<table class="table table-bordered table-hover">
+﻿@model List<Trainee>
+<table class="table table-bordered table-hover">
     <tr>
         <th>Id</th>
         <th>Name</th>
         <th>Image</th>
     </tr>
-    @foreach (Trainee item in Model)
+    @foreach (var item in Model)
     {
         <tr>
             <td>@item.Id</td>

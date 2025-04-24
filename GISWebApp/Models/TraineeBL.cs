@@ -20,10 +20,18 @@
         {
             return TraineeList;
         }
+        //[access modifier]  [return type] [functiom name](parmete)
+        //{}
 
         public Trainee GetByID(int id)//3
         {
+            //foreach (var t in TraineeList)
+            //{
+            //    if (t.Id == id)
+            //        return t;
+            //}
             //Linq
+
             return TraineeList.FirstOrDefault( t => t.Id == id);
         }
 
