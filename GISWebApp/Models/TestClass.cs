@@ -2,6 +2,27 @@
 
 namespace GISWebApp.Models
 {
+    class MyController
+    {
+        int x;
+        public object Model { get; set; }
+
+        public int X
+        {
+            get { return x; }
+            set { x = value; }
+        } //
+
+        public dynamic X2
+        {
+            get { return x; }
+            set { x = value; }
+        }
+    }
+
+
+
+
     //design class == >cant dentermine type
     public class Parent<T>//open type
     {
@@ -19,6 +40,9 @@ namespace GISWebApp.Models
     {
         public int Add(int x,int y)
         {
+            MyController ctr=new MyController();
+            //ctr.x;
+            ctr.Model = new Employee();
             Child c = new Child();
             Child2<string> c2 = new Child2<string>();
 

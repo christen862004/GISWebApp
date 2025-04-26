@@ -1,0 +1,47 @@
+﻿@model Employee
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<h2 style="background-color:@ViewData["Color"]">@Model.Name</h2>
+<h2 style="background-color:@ViewBag.Color">@Model.Name</h2>
+<h3>@ViewData["Message"]</h3>
+<h3>@ViewBag.Message</h3>
+
+<hr />
+<h3>@(int.Parse(ViewData["Temp"].ToString())-10)</h3>
+
+<h3>@(ViewBag.Temp - 10)</h3>
+<hr />
+<select class="form form-control">
+    @foreach (string item in (List<string>)ViewData["Brch"])
+    {
+        <option>@item</option>
+    }
+</select>
+<select class="form form-control">
+    @foreach (string item in ViewBag.Brch)
+    {
+        <option>@item</option>
+    }
+</select>
+
+
+<!--ViewData Disadv.
+        1) Magic String
+        2) Boxing | Unboxing "Type Casting"
+    ViewBag Dynamic
+        1) Casting Runtime as exception
+        2) MAgic String
+-->
+
+
+
+
+
+
+
+
