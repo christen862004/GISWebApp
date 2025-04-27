@@ -97,5 +97,54 @@ namespace GISWebApp.Controllers
         }
         #endregion
 
+        #region EditRegion
+        //Employee/Edit/1
+        //Employee/Edit?id=1
+        
+        public IActionResult Edit(int id) {
+            Employee empModel = context.Employees.FirstOrDefault(e => e.Id == id);
+            //viewModel
+            //declare
+            EmpWithDeptListViewModel empVm= new EmpWithDeptListViewModel();
+            //map
+            empVm.Id = empModel.Id;
+            empVm.Name = empModel.Name;
+            empVm.Salary = empModel.Salary;
+            empVm.ImageUrl = empModel.ImageUrl;
+            empVm.DepartmentId = empModel.DepartmentId;
+            empVm.Email = empModel.Email;
+            empVm.Departments = context.Departments.ToList();////////////
+            //send
+            
+            return View("Edit", empVm);
+            //view  "Edit"
+            //Model EmpWithDeptListViewModel
+        }
+        [HttpPost]
+        public IActionResult SaveEdit(EmpWithDeptListViewModel EmpFromReq)
+        {
+
+            if(EmpFromReq.Name!=null && EmpFromReq.Salary > 6000)
+            {
+                //Update in Database using Entity Framwork
+                //old refernce from db base pk (ID)
+                Employee? EmpFromDB=context.Employees
+                    .FirstOrDefault(e=>e.Id== EmpFromReq.Id);//Changed
+                
+                //change value
+                EmpFromDB.Name = EmpFromReq.Name;
+                EmpFromDB.Salary = EmpFromReq.Salary;
+                EmpFromDB.ImageUrl = EmpFromReq.ImageUrl;
+                EmpFromDB.Email = EmpFromReq.Email;
+                EmpFromDB.DepartmentId = EmpFromReq.DepartmentId;
+                //SAve Chage
+                context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            //refill list
+            EmpFromReq.Departments = context.Departments.ToList();//
+            return View("Edit",EmpFromReq);
+        }
+        #endregion
     }
 }
