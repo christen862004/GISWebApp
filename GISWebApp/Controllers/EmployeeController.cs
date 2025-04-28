@@ -2,9 +2,11 @@
 using GISWebApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
+using System.Collections.Generic;
 
 namespace GISWebApp.Controllers
 {
@@ -29,10 +31,35 @@ namespace GISWebApp.Controllers
             //2)return View("Index",empList);//View Index ,Model type List<Employee>
             return View(empList); //View with the same action name "Index" ,Model List<Employee>
         }
+        #region NEw
+        
+        public IActionResult New()
+        {
+            ViewData["DeptList"] = context.Departments.ToList();// List<selectedList
+            //ViewData["DeptList"] =new SelectList(context.Departments.ToList(),"Id","Name");// List<selectedList 
+            return View("New");
+        }
+        //any action can handel get | post
+        [HttpPost]//attribute handel only post (internal request)
+        [ValidateAntiForgeryToken]//request.form["__Request"]
+        public IActionResult SaveNEw(Employee EmpFromReq)
+        {
+            if (EmpFromReq.Name != null)
+            {
+                //save
+                context.Employees.Add(EmpFromReq);
+                context.SaveChanges();
+                return RedirectToAction("Index", "Employee");//,new { id=1,name="sadd"});
+            }
+            ViewData["DeptList"] = context.Departments.ToList();//List<selectedList
+            return View("New", EmpFromReq);
+        }
+        #endregion
+
 
         #region DEtails
         //get instructor details
-        public IActionResult Details(int id)
+        public IActionResult Details(int id,string name)
         {
             //logic
             string Msg = "Hello";
@@ -121,6 +148,7 @@ namespace GISWebApp.Controllers
             //Model EmpWithDeptListViewModel
         }
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public IActionResult SaveEdit(EmpWithDeptListViewModel EmpFromReq)
         {
 

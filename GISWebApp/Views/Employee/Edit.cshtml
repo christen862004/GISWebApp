@@ -1,20 +1,60 @@
 ﻿@model EmpWithDeptListViewModel
 @{
     ViewData["Title"] = "Edit";
+    Dictionary<string, string> Dic = new();
+    Dic["id"] = Model.Id.ToString();
+    Dic["name"] = Model.Name
+    ;
+    Dic["age"] = "11";
+
 }
 
 <h1>Edit</h1>
 <!--Post url:/Employee/SaveEdit/1-->
-<form action="/Employee/SaveEdit/@Model.Id" method="post">
+<form asp-action="SaveEdit" asp-controller="Employee" asp-route-itemid="@Model.Id" method="post">
 @* <input type="hidden" name="Id" value="@Model.Id" />     *@
+
+    <div>
+        <!--Pure HTML-->
+        <!--
+            <label>Email</label>
+            <input type="email" name="Email" id="Email" value="@Model.Email" class="form form-control" />
+        -->
+        <!--Pure C# USing HTML Helper-->
+        <!--Lossly Type Helper-->
+        @* @Html.Label("Email")
+        @Html.TextBox("Email", null, new { style = "color:red",@class="form form-control"}) *@
+        
+        <!--Strong Type HTML Helper-->
+        @* @Html.LabelFor(e=>e.Email) *@
+        <!--Display Property Name-->
+        @* @Html.TextBoxFor(e => e.Email, new { @class = "form form-control" }) *@
+        @* @Html.EditorFor(e=>e.Email) *@
+        <label asp-for="Email"></label>
+        <input class="form form-control" asp-for="Email"/>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div>
         <label>Name</label>
+
         <input type="text" name="Name" id="Name" value="@Model.Name" class="form form-control" />
+        
     </div>
-    <div>
-        <label>Email</label>
-        <input type="email" name="Email" id="Email" value="@Model.Email" class="form form-control" />
-    </div>
+    
     <div>
         <label>Salary</label>
         <input type="number" name="Salary" id="Salary" value="@Model.Salary" class="form form-control" />
@@ -37,14 +77,26 @@
                 {
                     <option value="@deptItem.Id">@deptItem.Name</option>
                 }
-                    
-                }
             }
         </select>
     </div>
     
     <input type="submit" value="Save" class="btn btn-success" />
 </form>
-<a href="/Employee/Index">Back To List</a>
+<!--Pure HTML-->
+<a href="/Employee/Index">Back To List</a><br/>
+<!--Pure C#-->
+@Html.ActionLink("Back To List","Index","Employee")<br />
+<!--Tag Helper-->
+<a asp-action="Index" asp-controller="Employee">Back To List</a>
+<hr />
+<a href="/Employee/Details/@Model.Id?name=@Model.Name">Details</a>
+<br />
+
+@Html.ActionLink("Details Link","Details","Employee",new{id=Model.Id,name=Model.Name,age=10})
+<br />
+<a asp-action="Details" asp-controller="Employee"
+   asp-route-id="@Model.Id" asp-route-name="@Model.Name" asp-route-age="11"
+ asp-all-route-data="Dic"> DEtails Tag Hleper</a>
 
 

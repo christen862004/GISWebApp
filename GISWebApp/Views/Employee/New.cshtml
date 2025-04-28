@@ -1,0 +1,35 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "New";
+    SelectList DeptSelectList = new SelectList(ViewBag.DeptList,"Id","Name");
+}
+
+<h1>New</h1>
+<form method="post" asp-action="SaveNew" asp-controller="Employee">
+    @* @Html.AntiForgeryToken() *@
+    <div>
+        <label asp-for="Name"></label>
+        <input class="form form-control" asp-for="Name"/>
+    </div>
+    <div>
+        <label asp-for="Salary"></label>
+        <input class="form form-control" asp-for="Salary"/>
+    </div>
+    <div>
+        <label asp-for="ImageUrl"></label>
+        <input class="form form-control" asp-for="ImageUrl" />
+    </div>
+    <div>
+        <label asp-for="Email"></label>
+        <input class="form form-control" asp-for="Email" />
+    </div>
+    <div>
+        <label asp-for="DepartmentId"></label>
+        <select class="form form-control" asp-for="DepartmentId" asp-items="@DeptSelectList">
+            <option value="0">-- Select DEpartment ---</option>
+        </select>
+    </div>
+    <input type="submit" value="Create" class="btn btn-success" />
+</form>
+<a asp-action="Index" asp-controller="Employee"> Back To List</a>
+
