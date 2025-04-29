@@ -8,6 +8,10 @@ namespace GISWebApp
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(45);//wait time close
+            });
 
             var app = builder.Build();
 
@@ -19,6 +23,8 @@ namespace GISWebApp
             app.UseStaticFiles();
 
             app.UseRouting();
+            
+            app.UseSession();//application understand Session(w/R)
 
             app.UseAuthorization();
 

@@ -29,7 +29,7 @@ namespace GISWebApp.Controllers
             //1)return View("Index");//View Index ,Model = null
             //3)return View();//View with the same action name "Index" ,Model Null
             //2)return View("Index",empList);//View Index ,Model type List<Employee>
-            return View(empList); //View with the same action name "Index" ,Model List<Employee>
+            return View("Index",empList); //View with the same action name "Index" ,Model List<Employee>
         }
         #region NEw
         
