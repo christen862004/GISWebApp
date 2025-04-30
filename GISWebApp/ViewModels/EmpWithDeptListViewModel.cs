@@ -19,6 +19,6 @@ namespace GISWebApp.ViewModels
         //FK
         public int DepartmentId { get; set; }
         //List<department>
-        public List<Department> Departments { get; set; }
+        public List<Department>? Departments { get; set; }
     }
 }

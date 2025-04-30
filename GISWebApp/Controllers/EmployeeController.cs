@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using System;
 using System.Collections.Generic;
 
@@ -31,6 +32,18 @@ namespace GISWebApp.Controllers
             //2)return View("Index",empList);//View Index ,Model type List<Employee>
             return View("Index",empList); //View with the same action name "Index" ,Model List<Employee>
         }
+
+        public IActionResult CheckSalary(int Salary,int DepartmentId)
+        {
+
+            //remote execute Db
+            if (Salary > 6000 && DepartmentId==1)
+                return Json(true);
+            else if(Salary>8000 && DepartmentId==2)
+                return Json(true);
+            else
+                return Json(false);
+        }
         #region NEw
         
         public IActionResult New()
@@ -44,18 +57,24 @@ namespace GISWebApp.Controllers
         [ValidateAntiForgeryToken]//request.form["__Request"]
         public IActionResult SaveNEw(Employee EmpFromReq)
         {
-            if (EmpFromReq.Name != null)
+            //if (EmpFromReq.Name != null)
+            if(ModelState.IsValid==true)//validation Server Side
             {
-                //save
-                context.Employees.Add(EmpFromReq);
-                context.SaveChanges();
-                return RedirectToAction("Index", "Employee");//,new { id=1,name="sadd"});
+                try
+                {
+                    context.Employees.Add(EmpFromReq);
+                    context.SaveChanges();
+                    return RedirectToAction("Index", "Employee");//,new { id=1,name="sadd"});
+                }catch(Exception ex)
+                {
+                    //ModelState.AddModelError("DepartmentId", "Please Select DEpartment");
+                    ModelState.AddModelError("Key1", ex.InnerException.Message);
+                }
             }
             ViewData["DeptList"] = context.Departments.ToList();//List<selectedList
             return View("New", EmpFromReq);
         }
         #endregion
-
 
         #region DEtails
         //get instructor details
@@ -123,11 +142,10 @@ namespace GISWebApp.Controllers
             return View("DetailsVM", EmpVm);
         }
         #endregion
-
+        
         #region EditRegion
         //Employee/Edit/1
         //Employee/Edit?id=1
-        
         public IActionResult Edit(int id) {
             Employee empModel = context.Employees.FirstOrDefault(e => e.Id == id);
             //viewModel
