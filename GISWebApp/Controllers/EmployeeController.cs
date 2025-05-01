@@ -1,4 +1,5 @@
 ﻿using GISWebApp.Models;
+using GISWebApp.Repository;
 using GISWebApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -13,18 +14,25 @@ namespace GISWebApp.Controllers
 {
     public class EmployeeController : Controller
     {
-        CompanyContext context = new CompanyContext();
-        
+        //Employee/new
+        //DIP
+        IEmployeeRepository EmpRepo;
+        IDepartmentRepository DeptRepo;
         //constructore class C# default parameter less constructor
-        public  EmployeeController()
+        //EmployeeController empConte=new EmployeeController()
+        public EmployeeController
+            (IEmployeeRepository _empRepo, IDepartmentRepository _deptRepo)
         {
-                
+            EmpRepo = _empRepo;
+            DeptRepo = _deptRepo;
+            
         }
 
         //show all instructor
         public IActionResult Index()
         {
-            List<Employee> empList= context.Employees.ToList();
+            
+            List<Employee> empList = EmpRepo.GetAll();
             int x = 10;
             //if(x>5 && x%2==0)
             //1)return View("Index");//View Index ,Model = null
@@ -48,7 +56,7 @@ namespace GISWebApp.Controllers
         
         public IActionResult New()
         {
-            ViewData["DeptList"] = context.Departments.ToList();// List<selectedList
+            ViewData["DeptList"] = DeptRepo.GetAll();
             //ViewData["DeptList"] =new SelectList(context.Departments.ToList(),"Id","Name");// List<selectedList 
             return View("New");
         }
@@ -62,8 +70,8 @@ namespace GISWebApp.Controllers
             {
                 try
                 {
-                    context.Employees.Add(EmpFromReq);
-                    context.SaveChanges();
+                    EmpRepo.Add(EmpFromReq);
+                    EmpRepo.Save();
                     return RedirectToAction("Index", "Employee");//,new { id=1,name="sadd"});
                 }catch(Exception ex)
                 {
@@ -71,7 +79,7 @@ namespace GISWebApp.Controllers
                     ModelState.AddModelError("Key1", ex.InnerException.Message);
                 }
             }
-            ViewData["DeptList"] = context.Departments.ToList();//List<selectedList
+            ViewData["DeptList"] = DeptRepo.GetAll();
             return View("New", EmpFromReq);
         }
         #endregion
@@ -97,7 +105,7 @@ namespace GISWebApp.Controllers
             ViewData["Color"] = "blue";
 
             //Model 
-            Employee empMode = context.Employees.FirstOrDefault(e=>e.Id== id);
+            Employee empMode = EmpRepo.GetById(id); 
 
             return View("Details", empMode);
         }
@@ -116,10 +124,12 @@ namespace GISWebApp.Controllers
             //Department? deptModel = context.Departments //Get DEpartment 
             //    .FirstOrDefault(d => d.Id == empMode.DepartmentId);//Pk == Fks
             #endregion
-            
+
             //Another Way
-            Employee? empMode = context.Employees.Include(e=>e.Dept)
-               .FirstOrDefault(e => e.Id == id);
+            Employee? empMode = EmpRepo.GetAll("Dept").FirstOrDefault();
+                
+                //context.Employees.Include(e=>e.Dept)
+               //.FirstOrDefault(e => e.Id == id);
             
             //Step 2 :Declare ViewModel
             EmpDepNAmeWithBrchTempMsgColorViewModel EmpVm = new();
@@ -132,13 +142,7 @@ namespace GISWebApp.Controllers
             EmpVm.Message = Msg;
             EmpVm.Temp = Temp;
             EmpVm.Color = Temp < 25 ? "Blue" : "Red";
-            //if (Temp < 25)
-            //    EmpVm.Color = "blue";
-            //else
-            //    EmpVm.Color = "red";
-
-
-            //Step 4 :Send  ViewModel to View
+           
             return View("DetailsVM", EmpVm);
         }
         #endregion
@@ -147,7 +151,7 @@ namespace GISWebApp.Controllers
         //Employee/Edit/1
         //Employee/Edit?id=1
         public IActionResult Edit(int id) {
-            Employee empModel = context.Employees.FirstOrDefault(e => e.Id == id);
+            Employee empModel =EmpRepo.GetById(id);
             //viewModel
             //declare
             EmpWithDeptListViewModel empVm= new EmpWithDeptListViewModel();
@@ -158,7 +162,7 @@ namespace GISWebApp.Controllers
             empVm.ImageUrl = empModel.ImageUrl;
             empVm.DepartmentId = empModel.DepartmentId;
             empVm.Email = empModel.Email;
-            empVm.Departments = context.Departments.ToList();////////////
+            empVm.Departments = DeptRepo.GetAll();////////////
             //send
             
             return View("Edit", empVm);
@@ -174,21 +178,22 @@ namespace GISWebApp.Controllers
             {
                 //Update in Database using Entity Framwork
                 //old refernce from db base pk (ID)
-                Employee? EmpFromDB=context.Employees
-                    .FirstOrDefault(e=>e.Id== EmpFromReq.Id);//Changed
-                
+                Employee? Emp = new Employee();//Changed
+
                 //change value
-                EmpFromDB.Name = EmpFromReq.Name;
-                EmpFromDB.Salary = EmpFromReq.Salary;
-                EmpFromDB.ImageUrl = EmpFromReq.ImageUrl;
-                EmpFromDB.Email = EmpFromReq.Email;
-                EmpFromDB.DepartmentId = EmpFromReq.DepartmentId;
-                //SAve Chage
-                context.SaveChanges();
+                Emp.Id = EmpFromReq.Id;
+                Emp.Name = EmpFromReq.Name;
+                Emp.Salary = EmpFromReq.Salary;
+                Emp.ImageUrl = EmpFromReq.ImageUrl;
+                Emp.Email = EmpFromReq.Email;
+                Emp.DepartmentId = EmpFromReq.DepartmentId;
+                
+                EmpRepo.Update(Emp);
+                EmpRepo.Save();
                 return RedirectToAction("Index");
             }
             //refill list
-            EmpFromReq.Departments = context.Departments.ToList();//
+            EmpFromReq.Departments = DeptRepo.GetAll();//
             return View("Edit",EmpFromReq);
         }
         #endregion

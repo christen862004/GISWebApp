@@ -6,10 +6,22 @@ namespace GISWebApp.Models
     {
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
+        //compatibitliy
+        public CompanyContext() : base()
+        {
+
+        }
+
+
+        public CompanyContext(DbContextOptions options):base(options)
+        {
+            
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=GISWebDB;Integrated Security=True;Encrypt=False");
+            optionsBuilder
+                .UseSqlServer("Data Source=.;Initial Catalog=GISWebDB;Integrated Security=True;Encrypt=False");
         }
     }
 }

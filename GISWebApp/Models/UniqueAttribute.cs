@@ -18,6 +18,9 @@ namespace GISWebApp.Models
             //Employee EmpFromRequest =(Employee) validationContext.ObjectInstance;
 
             CompanyContext context = new CompanyContext();
+           
+           // context.Set<Employee>().fir
+            
             Employee empFromDb= context.Employees
                 .FirstOrDefault(e => e.Email == email && e.DepartmentId == EmpFromRequest.DepartmentId);
             

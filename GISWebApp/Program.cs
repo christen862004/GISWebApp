@@ -1,3 +1,8 @@
+using GISWebApp.Models;
+using GISWebApp.Repository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+
 namespace GISWebApp
 {
     public class Program
@@ -7,12 +12,23 @@ namespace GISWebApp
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            //Built in service already register (122)
+            //built in service need to register (optial service)
             builder.Services.AddControllersWithViews();
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(45);//wait time close
             });
 
+            builder.Services.AddDbContext<CompanyContext>(options => {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("cs"));
+            });
+
+            //Custom servic need to declare  ,and need to register ( dispose )
+            builder.Services.AddScoped<IEmployeeRepository,EmployeeRepository>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+
+            //------------------------------------------
             var app = builder.Build();
 
             #region Configure the HTTP request pipeline. Day 3 Middleware

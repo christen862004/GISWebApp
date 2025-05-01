@@ -1,16 +1,23 @@
 ﻿using GISWebApp.Models;
+using GISWebApp.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GISWebApp.Controllers
 {
     public class DepartmentController : Controller
     {
-        CompanyContext context = new CompanyContext();
-        //<a request Get
+        //CompanyContext context = new CompanyContext();
+        //poly
+        IDepartmentRepository DeptRepo;
+        public DepartmentController(IDepartmentRepository deptRepo)
+        {
+            DeptRepo = deptRepo;
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
-            List<Department> departmentList = context.Departments.ToList();
+            List<Department> departmentList = DeptRepo.GetAll();
             return View("Index",departmentList);//View "Index"
         }
 
@@ -31,8 +38,8 @@ namespace GISWebApp.Controllers
             //Validation server
             if (deptFromReq.Name != null && deptFromReq.ManagerName != null)
             {
-                context.Departments.Add(deptFromReq);
-                context.SaveChanges();//thow exception or run normal
+                DeptRepo.Add(deptFromReq);
+                DeptRepo.Save();
 
                 return RedirectToAction("Index", "Department");//call action
             }
