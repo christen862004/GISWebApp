@@ -1,6 +1,7 @@
 ﻿using GISWebApp.Models;
 using GISWebApp.Repository;
 using GISWebApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -29,6 +30,8 @@ namespace GISWebApp.Controllers
         }
 
         //show all instructor
+        //check cookie "Cookies"
+        [Authorize]
         public IActionResult Index()
         {
             
@@ -173,7 +176,7 @@ namespace GISWebApp.Controllers
         //[ValidateAntiForgeryToken]
         public IActionResult SaveEdit(EmpWithDeptListViewModel EmpFromReq)
         {
-
+            
             if(EmpFromReq.Name!=null && EmpFromReq.Salary > 6000)
             {
                 //Update in Database using Entity Framwork

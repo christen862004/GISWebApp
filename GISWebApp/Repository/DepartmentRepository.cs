@@ -6,10 +6,15 @@ namespace GISWebApp.Repository
     public class DepartmentRepository : IDepartmentRepository
     {
         CompanyContext context;
+        public string Id { get; set; }
+
+
         public DepartmentRepository(CompanyContext _Ctx)//inject
         {
-            context =_Ctx; 
+            context = _Ctx; 
+            Id =Guid.NewGuid().ToString();
         }
+
 
         //define function once, call alot to times
         public void Add(Department obj)

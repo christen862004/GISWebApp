@@ -31,6 +31,8 @@ namespace GISWebApp.Models
         public int DepartmentId { get; set; } = 2;
         
         
-        public Department? Dept { get; set; } 
+        public Department? Dept { get; set; }
+
+        //public UserAccount UserAccount { get; set; }
     }
 }

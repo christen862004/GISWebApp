@@ -1,0 +1,16 @@
+﻿@using GISWebApp.Repository
+@inject IDepartmentRepository DeptRepo
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<h2>Services Id From Controller</h2>
+<h3>@ViewBag.Id</h3>
+
+<hr />
+
+<h2>Services Id From View</h2>
+<h3>@DeptRepo.Id</h3>

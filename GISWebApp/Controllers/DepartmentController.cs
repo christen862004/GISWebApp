@@ -1,5 +1,6 @@
 ﻿using GISWebApp.Models;
 using GISWebApp.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GISWebApp.Controllers
@@ -15,6 +16,7 @@ namespace GISWebApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]//check
         public IActionResult Index()
         {
             List<Department> departmentList = DeptRepo.GetAll();

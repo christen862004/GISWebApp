@@ -6,6 +6,7 @@ namespace GISWebApp.Models
     {
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<UserAccount> Users { get; set; }
         //compatibitliy
         public CompanyContext() : base()
         {
